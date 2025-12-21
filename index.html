@@ -6,154 +6,105 @@
   <title>Secret Santa 🎁</title>
   <style>
     :root{
-      --bg: #0b1220;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.09);
-      --text: #e8eefc;
-      --muted: rgba(232,238,252,.72);
-      --accent: #7c5cff;
-      --accent2:#23c483;
+      --bg:#0b1220;
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.09);
+      --text:#e8eefc;
+      --muted:rgba(232,238,252,.72);
+      --accent:#7c5cff;
+      --ok:#23c483;
       --danger:#ff4d6d;
-      --border: rgba(255,255,255,.12);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 16px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --border:rgba(255,255,255,.12);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      --sans:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: var(--sans);
-      background: radial-gradient(1200px 800px at 30% 10%, rgba(124,92,255,.25), transparent 55%),
-                  radial-gradient(900px 700px at 80% 35%, rgba(35,196,131,.18), transparent 55%),
-                  var(--bg);
-      color: var(--text);
+      font-family:var(--sans);
+      background:
+        radial-gradient(1200px 800px at 30% 10%, rgba(124,92,255,.25), transparent 55%),
+        radial-gradient(900px 700px at 80% 35%, rgba(35,196,131,.18), transparent 55%),
+        var(--bg);
+      color:var(--text);
       min-height:100vh;
     }
-    .wrap{max-width: 980px; margin: 0 auto; padding: 28px 18px 60px;}
-    header{
-      display:flex; gap:14px; align-items:flex-start; justify-content:space-between;
-      margin-bottom: 18px;
-    }
-    h1{margin:0; font-size: 28px; letter-spacing:.2px}
-    .sub{margin-top:6px; color: var(--muted); line-height:1.4}
+    .wrap{max-width:980px;margin:0 auto;padding:28px 18px 60px;}
+    header{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;margin-bottom:18px;}
+    h1{margin:0;font-size:28px;letter-spacing:.2px}
+    .sub{margin-top:6px;color:var(--muted);line-height:1.4}
     .badge{
-      font-size: 12px; color: var(--muted);
+      font-size:12px;color:var(--muted);
       border:1px solid var(--border);
-      padding: 8px 10px; border-radius: 999px;
-      background: rgba(255,255,255,.03);
-      white-space:nowrap;
-      height: fit-content;
+      padding:8px 10px;border-radius:999px;
+      background:rgba(255,255,255,.03);
+      white-space:nowrap;height:fit-content;
     }
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 16px;
-      margin-top: 16px;
-    }
-    @media (max-width: 860px){
-      .grid{grid-template-columns: 1fr; }
-      header{flex-direction:column}
-      .badge{align-self:flex-start}
-    }
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px;}
     .card{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
     .card .hd{
-      padding: 14px 16px;
-      background: rgba(255,255,255,.03);
-      border-bottom: 1px solid var(--border);
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 16px;
+      background:rgba(255,255,255,.03);
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
     }
-    .card .bd{ padding: 16px; }
-    label{display:block; font-size: 12px; color: var(--muted); margin-bottom:8px;}
-    input[type="text"], textarea, select{
+    .card .bd{padding:16px;}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px;}
+    input[type="password"], input[type="text"], select{
       width:100%;
-      padding: 12px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      color:var(--text);
       outline:none;
     }
-    textarea{min-height: 180px; resize: vertical; font-family: var(--mono); line-height: 1.35;}
-    .row{display:grid; grid-template-columns: 1fr 1fr; gap: 12px;}
-    @media (max-width: 520px){ .row{grid-template-columns:1fr} }
-    .btns{display:flex; flex-wrap:wrap; gap:10px; margin-top: 12px;}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media (max-width:560px){.row{grid-template-columns:1fr}}
+    .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
     button{
-      appearance:none; border:none;
-      padding: 11px 14px;
-      border-radius: 12px;
-      cursor:pointer;
-      font-weight: 650;
-      background: var(--card2);
-      color: var(--text);
-      border: 1px solid var(--border);
-      transition: transform .06s ease, opacity .2s ease, background .2s ease;
+      appearance:none;border:none;
+      padding:11px 14px;border-radius:12px;
+      cursor:pointer;font-weight:650;
+      background:var(--card2);color:var(--text);
+      border:1px solid var(--border);
+      transition:transform .06s ease, opacity .2s ease, background .2s ease;
       user-select:none;
     }
-    button:active{transform: translateY(1px)}
-    .primary{ background: rgba(124,92,255,.25); border-color: rgba(124,92,255,.55); }
-    .ok{ background: rgba(35,196,131,.18); border-color: rgba(35,196,131,.55); }
-    .danger{ background: rgba(255,77,109,.16); border-color: rgba(255,77,109,.55); }
-    .muted{ opacity:.85; font-weight:600; }
-    .hint{
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--muted);
-      line-height:1.45;
-    }
+    button:active{transform:translateY(1px)}
+    .primary{background:rgba(124,92,255,.25);border-color:rgba(124,92,255,.55);}
+    .ok{background:rgba(35,196,131,.18);border-color:rgba(35,196,131,.55);}
+    .danger{background:rgba(255,77,109,.16);border-color:rgba(255,77,109,.55);}
+    .muted{opacity:.88;font-weight:600;}
     .status{
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
+      margin-top:10px;padding:10px 12px;border-radius:12px;
       border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
+      background:rgba(255,255,255,.03);
+      color:var(--muted);font-size:13px;line-height:1.45;
     }
-    .status strong{color: var(--text)}
-    .hidden{display:none !important;}
+    .status strong{color:var(--text)}
+    .hidden{display:none!important;}
     .revealBox{
-      margin-top: 14px;
-      border-radius: 14px;
+      margin-top:14px;border-radius:14px;
       border:1px dashed rgba(255,255,255,.22);
-      padding: 14px;
-      background: rgba(0,0,0,.14);
+      padding:14px;background:rgba(0,0,0,.14);
     }
-    .big{
-      font-size: 18px;
-      margin: 0;
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-    .gift{
-      margin-top: 8px;
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.45;
-    }
+    .big{font-size:18px;margin:0;font-weight:800;letter-spacing:.2px}
+    .gift{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.45}
     .kbd{
-      font-family: var(--mono);
-      font-size: 12px;
-      padding: 2px 8px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      color: var(--muted);
+      font-family:var(--mono);
+      font-size:12px;padding:2px 8px;border:1px solid var(--border);
+      border-radius:999px;background:rgba(255,255,255,.04);color:var(--muted);
     }
-    footer{
-      margin-top: 16px;
-      color: rgba(232,238,252,.55);
-      font-size: 12px;
-      line-height:1.4;
-    }
-    a{color: #b6a8ff}
+    footer{margin-top:14px;color:rgba(232,238,252,.55);font-size:12px;line-height:1.4}
   </style>
 </head>
 <body>
@@ -162,217 +113,195 @@
       <div>
         <h1>Secret Santa 🎁</h1>
         <div class="sub">
-          Random pairing <span class="kbd">tanpa self-pair</span> + mode <span class="kbd">hold to reveal</span>.<br/>
-          Cocok buat dipakai bareng-bareng di satu HP/laptop.
+          Login pakai <span class="kbd">Nama</span> + <span class="kbd">Password</span>,
+          lalu <span class="kbd">Hold to Reveal</span>.
         </div>
       </div>
-      <div class="badge" id="persistBadge">Tidak ada pairing tersimpan</div>
+      <div class="badge">Pairing fixed (encrypted) ✅</div>
     </header>
 
-    <div class="grid">
-      <!-- SETUP -->
-      <section class="card">
-        <div class="hd">
-          <strong>Setup</strong>
-          <span class="kbd">index.html</span>
-        </div>
-        <div class="bd">
-          <div class="row">
-            <div>
-              <label for="eventName">Nama event (opsional)</label>
-              <input id="eventName" type="text" placeholder="Contoh: Secret Santa Lab Mesin 2025" />
+    <!-- LOGIN -->
+    <section class="card" id="loginCard">
+      <div class="hd">
+        <strong>Login</strong>
+        <span class="kbd">12 members</span>
+      </div>
+      <div class="bd">
+        <div class="row">
+          <div>
+            <label for="nameSel">Nama</label>
+            <select id="nameSel">
+              <option value="">— pilih namamu —</option>
+            </select>
+          </div>
+          <div>
+            <label for="pw">Password</label>
+            <input id="pw" type="password" placeholder="contoh: Namamu##" autocomplete="off" />
+            <div style="margin-top:10px; display:flex; gap:10px; align-items:center;">
+              <button class="muted" id="showPwBtn" type="button">Show</button>
+              <span class="kbd">jangan pakai password asli ya</span>
             </div>
-            <div>
-              <label for="budget">Budget hadiah (opsional)</label>
-              <input id="budget" type="text" placeholder="Contoh: Rp50.000 – Rp100.000" />
-            </div>
-          </div>
-
-          <div style="margin-top:12px">
-            <label for="names">Daftar peserta (1 baris = 1 nama)</label>
-            <textarea id="names" placeholder="Contoh:
-Garren
-Ayu
-Fikri
-Rara
-Bima"></textarea>
-          </div>
-
-          <div class="btns">
-            <button class="primary" id="generateBtn">Generate Pairing</button>
-            <button class="muted" id="saveBtn" title="Simpan pairing ke browser ini">Save</button>
-            <button class="muted" id="loadBtn" title="Ambil pairing dari browser ini">Load</button>
-            <button class="danger" id="resetBtn" title="Hapus pairing & input">Reset</button>
-          </div>
-
-          <div class="status" id="setupStatus">
-            Masukkan nama peserta lalu klik <strong>Generate Pairing</strong>.
-          </div>
-
-          <div class="hint">
-            Catatan: ini jalan <strong>100% di browser</strong> (tanpa server). Kalau mau “lebih secret”, jalankan di satu device, suruh tiap orang maju gantian pilih namanya dan <strong>tekan-tahan</strong> tombol reveal.
           </div>
         </div>
-      </section>
 
-      <!-- REVEAL -->
-      <section class="card">
-        <div class="hd">
-          <strong>Reveal</strong>
-          <span class="kbd">hold-to-reveal</span>
+        <div class="btns">
+          <button class="primary" id="loginBtn" type="button">Login</button>
         </div>
-        <div class="bd">
-          <label for="picker">Pilih namamu</label>
-          <select id="picker" disabled>
-            <option value="">— generate dulu —</option>
-          </select>
 
-          <div class="btns">
-            <button class="ok" id="holdBtn" disabled>Hold to Reveal</button>
-            <button id="toggleBtn" disabled title="Alternatif kalau device nggak enak buat hold">Toggle Reveal</button>
-          </div>
-
-          <div class="revealBox hidden" id="revealBox" aria-live="polite">
-            <p class="big" id="revealTitle">🎁 Kamu dapat: …</p>
-            <div class="gift" id="revealMeta"></div>
-          </div>
-
-          <footer>
-            Tips anti-ngintip: yang lain jangan lihat layar. Kalau perlu, setelah reveal langsung scroll sedikit atau tutup kotak reveal.
-          </footer>
+        <div class="status" id="loginStatus">
+          Pilih nama, masukkan password, lalu login. Setelah itu, kamu bisa reveal hadiahmu.
         </div>
-      </section>
-    </div>
+
+        <footer>
+          Catatan: Ini bukan sistem keamanan serius (for fun). Kalau mau lebih aman, pakai repo private (kalau plan GitHub kamu mendukung Pages untuk private).
+        </footer>
+      </div>
+    </section>
+
+    <!-- REVEAL -->
+    <section class="card hidden" id="revealCard">
+      <div class="hd">
+        <strong>Reveal</strong>
+        <span class="kbd" id="whoBadge">—</span>
+      </div>
+      <div class="bd">
+        <div class="btns">
+          <button class="ok" id="holdBtn" type="button">Hold to Reveal</button>
+          <button id="toggleBtn" type="button">Toggle Reveal</button>
+          <button class="danger" id="logoutBtn" type="button">Logout</button>
+        </div>
+
+        <div class="revealBox hidden" id="revealBox" aria-live="polite">
+          <p class="big" id="revealTitle">🎁 Kamu dapat: …</p>
+          <div class="gift" id="revealHint">
+            Lepas tombol untuk menyembunyikan lagi. (Biar yang lain nggak ngintip.)
+          </div>
+        </div>
+
+        <div class="status" id="revealStatus">
+          Tips: yang lain jangan lihat layar. Kamu bisa tahan tombol reveal sebentar aja terus lepas.
+        </div>
+      </div>
+    </section>
   </div>
 
   <script>
-    // ===== Utilities =====
-    const $ = (id) => document.getElementById(id);
+    // ==========================================================
+    // Users + pairing are FIXED and stored ENCRYPTED per user.
+    // No plaintext "who gets who" appears in the code.
+    // ==========================================================
 
-    function uniqTrimmedLines(text){
-      const raw = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-      const seen = new Set();
-      const out = [];
-      for (const n of raw){
-        const key = n.toLowerCase();
-        if (!seen.has(key)){
-          seen.add(key);
-          out.push(n);
-        }
-      }
+    const USERS = [
+      {"name":"Baskoro","salt":"xEz1Y1bxXsRYzohqmaX2rA==","iter":120000,"verifier":"D9Fjs+8x0YsQhQQqDZSFplNzga/TQXT63Tn+hW7p5AI=","iv":"ArBZKG6DPGdVLbYm","ct":"S1blfBSfwb8aHj+hNoQgmKEdAQ=="},
+      {"name":"Talitha","salt":"jMZQ2TudW3Wmftolnn7kIg==","iter":120000,"verifier":"8hyNrzxx2sarmyhd/xQ5rjVkOfBPXRvgrqlNY4n8R5I=","iv":"VCL5AbzWgYZ6uDUv","ct":"5HYh9cQkBgNqU51R/YST8NwyjQ=="},
+      {"name":"Afi","salt":"dZ3Tdu5ebqC/ivtuu7EwXA==","iter":120000,"verifier":"ykhZDgvS+TcEWCbTHsvnKgqITstMHoy4ydoHfx4n89c=","iv":"csO2de6Ugmm3amYy","ct":"xjZsbfx/jOXHwL5Pzkas44dmHA=="},
+      {"name":"Ami","salt":"5gcYBtEpLhBsZjKTJYqkrg==","iter":120000,"verifier":"b2TGknkYzPGXRq2IX/NqiXlYqH46cd2NbmkhIdKBdY0=","iv":"iFtkyOBBoJsoEYRb","ct":"L74HEZ1oFOTYULV+KY3p3eTwnanC8ow="},
+      {"name":"Agung","salt":"gS+OLOnHT1mTmQM/SNVE4A==","iter":120000,"verifier":"mprwxEFcwJFWRo3/+1UB2l3e0SL5q1vA8eXAaYnS7Fg=","iv":"DNF7DtGNgg5tXigx","ct":"QOnEqgmlj9TP52oYQPKPqWZjXTk="},
+      {"name":"Sae","salt":"GitR+icqB81Qu7aKm0TeoA==","iter":120000,"verifier":"7lOglfD51PbjQEGyebBjoSuz6BsHVrS5TmnjNbwy4uA=","iv":"6lTmUhoIaUf73Tzu","ct":"YBmQyfuPPSQWHkLvrdfcme7JJr4="},
+      {"name":"Icha","salt":"zmVx0IBI1SrJIXE0U4ZOhg==","iter":120000,"verifier":"LVMBDEJHfeCuAyUNxLnoSlqPB9CETC+CQwx6+mRzVT0=","iv":"QmD3H0zHg7mHq3Q2","ct":"LDQ3862O1XwbDEtpyMW+sfhTElHv"},
+      {"name":"Lili","salt":"w9G675xCKjUH6L2Bcig/Sg==","iter":120000,"verifier":"McpQG1viy7amPsfIoiL8/pgUVixERDf8N4m6c8rRLHo=","iv":"YOWWi6q5OygeSrgC","ct":"1og9tUgDEV3O44GFPYqkCLDc/N41"},
+      {"name":"Zhafa","salt":"icvucw1CfuOq4WNnb0aDMA==","iter":120000,"verifier":"bC23c5N9gL82Zfs5f/3248VomdcZaVwHeoqfTBkp0xc=","iv":"kHy9DB1FXnF+elQZ","ct":"HwOMAclFRVuVj0cFifcFNTHTq4bE"},
+      {"name":"Zakky","salt":"0abK8LGef8Rh4HBtOkADJA==","iter":120000,"verifier":"zdYo1Yjw7NPsEjVYMWP5lLcPPTAJxbSd4p80cqxJrjU=","iv":"ynb1fsLE5Pen01uN","ct":"gqwmpToBtYiGBPK1cgp+NWGs0F0="},
+      {"name":"Gladhys","salt":"LK7jeUhgWHh+A3PnhvSFvQ==","iter":120000,"verifier":"/0ogEGRD7+g6NfV8iVA26JpLinByZFuyRgm0jSFjwyQ=","iv":"T2jif+BAcj+gZIr/","ct":"FPL5Gfep3DgQRF+lbfY31PcCQndhE/A="},
+      {"name":"Rani","salt":"SpNqSXAtc3WGEMdmplrqYg==","iter":120000,"verifier":"e1NiKtjGk7OiIfDNrxAqg/G6W9i1JQnDkpws+te0KMU=","iv":"9viTu96FrYd4dufZ","ct":"+OXFtznLfG2GgMSfkRY9HSDxAApUrVI="}
+    ];
+
+    // ---------- helpers ----------
+    const $ = (id) => document.getElementById(id);
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+
+    function b64ToBytes(b64){
+      const bin = atob(b64);
+      const out = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
       return out;
     }
-
-    function shuffle(arr){
-      const a = arr.slice();
-      for (let i = a.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
+    function bytesToB64(bytes){
+      let bin = "";
+      for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+      return btoa(bin);
     }
-
-    // Generate a derangement (no one gets themselves).
-    // For small N, repeat-shuffle is practical + simple.
-    function makeDerangement(names){
-      if (names.length < 2) return null;
-      const maxTries = 2000;
-      for (let t = 0; t < maxTries; t++){
-        const recipients = shuffle(names);
-        let ok = true;
-        for (let i = 0; i < names.length; i++){
-          if (recipients[i].toLowerCase() === names[i].toLowerCase()){
-            ok = false; break;
-          }
-        }
-        if (ok){
-          const map = {};
-          for (let i = 0; i < names.length; i++) map[names[i]] = recipients[i];
-          return map;
-        }
-      }
-      return null; // extremely unlikely unless N is tiny or constraints exist
+    function setLoginStatus(html, kind="info"){
+      const box = $("loginStatus");
+      box.innerHTML = html;
+      box.style.borderColor =
+        kind === "ok" ? "rgba(35,196,131,.55)" :
+        kind === "bad" ? "rgba(255,77,109,.55)" :
+        "rgba(255,255,255,.12)";
     }
-
-    function nowStamp(){
-      const d = new Date();
-      return d.toLocaleString('id-ID', { dateStyle:'medium', timeStyle:'short' });
-    }
-
-    // ===== State =====
-    const STORAGE_KEY = "secret_santa_pairing_v1";
-    let pairing = null;
-    let revealed = false;
-
-    function setStatus(msg, kind="info"){
-      const box = $("setupStatus");
-      box.innerHTML = msg;
+    function setRevealStatus(html, kind="info"){
+      const box = $("revealStatus");
+      box.innerHTML = html;
       box.style.borderColor =
         kind === "ok" ? "rgba(35,196,131,.55)" :
         kind === "bad" ? "rgba(255,77,109,.55)" :
         "rgba(255,255,255,.12)";
     }
 
-    function updateBadge(){
-      const b = $("persistBadge");
-      const saved = localStorage.getItem(STORAGE_KEY);
-      b.textContent = saved ? "Ada pairing tersimpan ✅" : "Tidak ada pairing tersimpan";
-    }
+    // ---------- fill name dropdown ----------
+    const nameSel = $("nameSel");
+    USERS.map(u => u.name).sort((a,b)=>a.localeCompare(b,"id")).forEach(n=>{
+      const o=document.createElement("option");
+      o.value=n; o.textContent=n;
+      nameSel.appendChild(o);
+    });
 
-    function enableRevealUI(enabled){
-      $("picker").disabled = !enabled;
-      $("holdBtn").disabled = !enabled;
-      $("toggleBtn").disabled = !enabled;
-      if (!enabled){
-        $("revealBox").classList.add("hidden");
-        revealed = false;
+    // ---------- session state ----------
+    let current = null; // { name, recipient }
+    let revealed = false;
+
+    async function verifyAndDecrypt(name, password){
+      const user = USERS.find(u => u.name === name);
+      if (!user) throw new Error("Nama tidak ditemukan.");
+
+      const salt = b64ToBytes(user.salt);
+      const pwBytes = enc.encode(password);
+
+      // verifier = SHA-256(salt || password)
+      const combo = new Uint8Array(salt.length + pwBytes.length);
+      combo.set(salt, 0);
+      combo.set(pwBytes, salt.length);
+      const hashBuf = await crypto.subtle.digest("SHA-256", combo);
+      const hashB64 = bytesToB64(new Uint8Array(hashBuf));
+
+      if (hashB64 !== user.verifier){
+        throw new Error("Password salah.");
       }
-    }
 
-    function fillPicker(names){
-      const sel = $("picker");
-      sel.innerHTML = "";
-      const opt0 = document.createElement("option");
-      opt0.value = "";
-      opt0.textContent = "— pilih namamu —";
-      sel.appendChild(opt0);
-      for (const n of names){
-        const o = document.createElement("option");
-        o.value = n;
-        o.textContent = n;
-        sel.appendChild(o);
-      }
-    }
+      // derive AES-GCM key with PBKDF2
+      const baseKey = await crypto.subtle.importKey(
+        "raw",
+        pwBytes,
+        { name: "PBKDF2" },
+        false,
+        ["deriveKey"]
+      );
 
-    function getMetaText(){
-      const ev = $("eventName").value.trim();
-      const budget = $("budget").value.trim();
-      const parts = [];
-      if (ev) parts.push(`Event: <strong>${escapeHtml(ev)}</strong>`);
-      if (budget) parts.push(`Budget: <strong>${escapeHtml(budget)}</strong>`);
-      return parts.length ? parts.join(" • ") : "Biar makin seru: isi nama event & budget di kiri 🙂";
-    }
+      const aesKey = await crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt, iterations: user.iter, hash: "SHA-256" },
+        baseKey,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"]
+      );
 
-    function escapeHtml(s){
-      return s.replace(/[&<>"']/g, (c) => ({
-        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
-      }[c]));
+      const iv = b64ToBytes(user.iv);
+      const ct = b64ToBytes(user.ct);
+
+      const ptBuf = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv },
+        aesKey,
+        ct
+      );
+
+      return dec.decode(ptBuf); // recipient name (plaintext) — not stored in code
     }
 
     function showReveal(show){
-      const who = $("picker").value;
-      if (!pairing || !who){
-        $("revealBox").classList.add("hidden");
-        return;
-      }
-      const target = pairing[who];
-      if (!target){
-        $("revealBox").classList.add("hidden");
-        return;
-      }
+      if (!current) return;
       if (show){
-        $("revealTitle").textContent = `🎁 Kamu dapat: ${target}`;
-        $("revealMeta").innerHTML = getMetaText();
+        $("revealTitle").textContent = `🎁 Kamu dapat: ${current.recipient}`;
         $("revealBox").classList.remove("hidden");
       } else {
         $("revealBox").classList.add("hidden");
@@ -380,117 +309,85 @@ Bima"></textarea>
       revealed = show;
     }
 
-    // ===== Actions =====
-    $("generateBtn").addEventListener("click", () => {
-      const names = uniqTrimmedLines($("names").value);
-      if (names.length < 2){
-        setStatus("Minimal 2 peserta ya. (Kalau 1 orang… ya kamu ngadoin diri sendiri 😭)", "bad");
-        pairing = null;
-        enableRevealUI(false);
-        return;
-      }
-
-      const map = makeDerangement(names);
-      if (!map){
-        setStatus("Gagal generate pairing. Coba klik Generate lagi (random).", "bad");
-        pairing = null;
-        enableRevealUI(false);
-        return;
-      }
-
-      pairing = map;
-      fillPicker(names);
-      enableRevealUI(true);
-      $("picker").value = "";
+    function enterReveal(){
+      $("loginCard").classList.add("hidden");
+      $("revealCard").classList.remove("hidden");
+      $("whoBadge").textContent = current?.name ? `Logged in: ${current.name}` : "—";
       showReveal(false);
+      setRevealStatus("Tekan & tahan <strong>Hold to Reveal</strong> untuk melihat, lalu lepas untuk menyembunyikan lagi.", "ok");
+    }
 
-      setStatus(
-        `Pairing berhasil dibuat untuk <strong>${names.length}</strong> peserta. ` +
-        `Silakan pilih nama di panel Reveal. <span class="kbd">Generated: ${nowStamp()}</span>`,
-        "ok"
-      );
-    });
+    function logout(){
+      current = null;
+      revealed = false;
+      $("pw").value = "";
+      nameSel.value = "";
+      $("revealCard").classList.add("hidden");
+      $("loginCard").classList.remove("hidden");
+      $("revealBox").classList.add("hidden");
+      setLoginStatus("Logout berhasil. Pilih nama lagi untuk login.", "ok");
+    }
 
-    $("saveBtn").addEventListener("click", () => {
-      if (!pairing){
-        setStatus("Belum ada pairing untuk disimpan. Generate dulu ya.", "bad");
+    // ---------- login handler ----------
+    $("loginBtn").addEventListener("click", async () => {
+      const name = nameSel.value.trim();
+      const pw = $("pw").value;
+
+      if (!name){
+        setLoginStatus("Pilih <strong>Nama</strong> dulu ya.", "bad");
         return;
       }
-      const payload = {
-        pairing,
-        eventName: $("eventName").value.trim(),
-        budget: $("budget").value.trim(),
-        savedAt: new Date().toISOString()
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-      updateBadge();
-      setStatus("Pairing tersimpan di browser ini ✅ (localStorage).", "ok");
-    });
-
-    $("loadBtn").addEventListener("click", () => {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved){
-        setStatus("Belum ada pairing tersimpan di browser ini.", "bad");
+      if (!pw){
+        setLoginStatus("Masukkan <strong>Password</strong> dulu ya.", "bad");
         return;
       }
+
+      setLoginStatus("Memverifikasi…", "info");
+
       try{
-        const payload = JSON.parse(saved);
-        pairing = payload.pairing || null;
-        $("eventName").value = payload.eventName || "";
-        $("budget").value = payload.budget || "";
-        const names = pairing ? Object.keys(pairing) : [];
-        if (!pairing || names.length < 2){
-          setStatus("Data tersimpan rusak/kurang lengkap. Coba Generate ulang.", "bad");
-          pairing = null;
-          enableRevealUI(false);
-          return;
-        }
-        fillPicker(names);
-        enableRevealUI(true);
-        $("picker").value = "";
-        showReveal(false);
-        setStatus(`Pairing berhasil di-load ✅ <span class="kbd">Saved: ${payload.savedAt ? new Date(payload.savedAt).toLocaleString('id-ID') : '-'}</span>`, "ok");
-      } catch(e){
-        setStatus("Gagal load pairing (format data salah).", "bad");
+        // decrypt only for this user
+        const recipient = await verifyAndDecrypt(name, pw);
+        current = { name, recipient };
+        setLoginStatus(`Login sukses ✅ <span class="kbd">${name}</span>`, "ok");
+        $("pw").value = "";
+        enterReveal();
+      } catch (e){
+        setLoginStatus(`Gagal login ❌ ${e.message}`, "bad");
       }
-      updateBadge();
     });
 
-    $("resetBtn").addEventListener("click", () => {
-      pairing = null;
-      $("eventName").value = "";
-      $("budget").value = "";
-      $("names").value = "";
-      $("picker").innerHTML = `<option value="">— generate dulu —</option>`;
-      enableRevealUI(false);
-      setStatus("Reset selesai. Masukkan nama peserta lagi.", "info");
+    // show/hide password
+    $("showPwBtn").addEventListener("click", () => {
+      const el = $("pw");
+      el.type = (el.type === "password") ? "text" : "password";
+      $("showPwBtn").textContent = (el.type === "password") ? "Show" : "Hide";
     });
 
-    // Hold-to-reveal (mouse + touch)
-    const hold = $("holdBtn");
+    // ---------- hold-to-reveal ----------
+    const holdBtn = $("holdBtn");
     const startHold = (e) => { e.preventDefault(); showReveal(true); };
     const endHold   = (e) => { e.preventDefault(); showReveal(false); };
 
-    hold.addEventListener("mousedown", startHold);
-    hold.addEventListener("mouseup", endHold);
-    hold.addEventListener("mouseleave", endHold);
+    holdBtn.addEventListener("mousedown", startHold);
+    holdBtn.addEventListener("mouseup", endHold);
+    holdBtn.addEventListener("mouseleave", endHold);
 
-    hold.addEventListener("touchstart", startHold, {passive:false});
-    hold.addEventListener("touchend", endHold, {passive:false});
-    hold.addEventListener("touchcancel", endHold, {passive:false});
+    holdBtn.addEventListener("touchstart", startHold, {passive:false});
+    holdBtn.addEventListener("touchend", endHold, {passive:false});
+    holdBtn.addEventListener("touchcancel", endHold, {passive:false});
 
-    // Toggle reveal (fallback)
+    // toggle reveal
     $("toggleBtn").addEventListener("click", () => {
       showReveal(!revealed);
     });
 
-    // Change selection hides reveal
-    $("picker").addEventListener("change", () => {
-      showReveal(false);
-    });
+    // logout
+    $("logoutBtn").addEventListener("click", logout);
 
-    // init badge
-    updateBadge();
+    // initial hint
+    if (!window.crypto?.subtle){
+      setLoginStatus("Browser kamu tidak mendukung WebCrypto. Coba pakai browser modern (Chrome/Safari terbaru).", "bad");
+    }
   </script>
 </body>
 </html>
