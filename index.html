@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Secret Santa 🎁</title>
+  <style>
+    :root{
+      --bg: #0b1220;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.09);
+      --text: #e8eefc;
+      --muted: rgba(232,238,252,.72);
+      --accent: #7c5cff;
+      --accent2:#23c483;
+      --danger:#ff4d6d;
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 800px at 30% 10%, rgba(124,92,255,.25), transparent 55%),
+                  radial-gradient(900px 700px at 80% 35%, rgba(35,196,131,.18), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      min-height:100vh;
+    }
+    .wrap{max-width: 980px; margin: 0 auto; padding: 28px 18px 60px;}
+    header{
+      display:flex; gap:14px; align-items:flex-start; justify-content:space-between;
+      margin-bottom: 18px;
+    }
+    h1{margin:0; font-size: 28px; letter-spacing:.2px}
+    .sub{margin-top:6px; color: var(--muted); line-height:1.4}
+    .badge{
+      font-size: 12px; color: var(--muted);
+      border:1px solid var(--border);
+      padding: 8px 10px; border-radius: 999px;
+      background: rgba(255,255,255,.03);
+      white-space:nowrap;
+      height: fit-content;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns: 1fr; }
+      header{flex-direction:column}
+      .badge{align-self:flex-start}
+    }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding: 14px 16px;
+      background: rgba(255,255,255,.03);
+      border-bottom: 1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .card .bd{ padding: 16px; }
+    label{display:block; font-size: 12px; color: var(--muted); margin-bottom:8px;}
+    input[type="text"], textarea, select{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      outline:none;
+    }
+    textarea{min-height: 180px; resize: vertical; font-family: var(--mono); line-height: 1.35;}
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap: 12px;}
+    @media (max-width: 520px){ .row{grid-template-columns:1fr} }
+    .btns{display:flex; flex-wrap:wrap; gap:10px; margin-top: 12px;}
+    button{
+      appearance:none; border:none;
+      padding: 11px 14px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 650;
+      background: var(--card2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      transition: transform .06s ease, opacity .2s ease, background .2s ease;
+      user-select:none;
+    }
+    button:active{transform: translateY(1px)}
+    .primary{ background: rgba(124,92,255,.25); border-color: rgba(124,92,255,.55); }
+    .ok{ background: rgba(35,196,131,.18); border-color: rgba(35,196,131,.55); }
+    .danger{ background: rgba(255,77,109,.16); border-color: rgba(255,77,109,.55); }
+    .muted{ opacity:.85; font-weight:600; }
+    .hint{
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height:1.45;
+    }
+    .status{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .status strong{color: var(--text)}
+    .hidden{display:none !important;}
+    .revealBox{
+      margin-top: 14px;
+      border-radius: 14px;
+      border:1px dashed rgba(255,255,255,.22);
+      padding: 14px;
+      background: rgba(0,0,0,.14);
+    }
+    .big{
+      font-size: 18px;
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .gift{
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .kbd{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+    }
+    footer{
+      margin-top: 16px;
+      color: rgba(232,238,252,.55);
+      font-size: 12px;
+      line-height:1.4;
+    }
+    a{color: #b6a8ff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Secret Santa 🎁</h1>
+        <div class="sub">
+          Random pairing <span class="kbd">tanpa self-pair</span> + mode <span class="kbd">hold to reveal</span>.<br/>
+          Cocok buat dipakai bareng-bareng di satu HP/laptop.
+        </div>
+      </div>
+      <div class="badge" id="persistBadge">Tidak ada pairing tersimpan</div>
+    </header>
+
+    <div class="grid">
+      <!-- SETUP -->
+      <section class="card">
+        <div class="hd">
+          <strong>Setup</strong>
+          <span class="kbd">index.html</span>
+        </div>
+        <div class="bd">
+          <div class="row">
+            <div>
+              <label for="eventName">Nama event (opsional)</label>
+              <input id="eventName" type="text" placeholder="Contoh: Secret Santa Lab Mesin 2025" />
+            </div>
+            <div>
+              <label for="budget">Budget hadiah (opsional)</label>
+              <input id="budget" type="text" placeholder="Contoh: Rp50.000 – Rp100.000" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label for="names">Daftar peserta (1 baris = 1 nama)</label>
+            <textarea id="names" placeholder="Contoh:
+Garren
+Ayu
+Fikri
+Rara
+Bima"></textarea>
+          </div>
+
+          <div class="btns">
+            <button class="primary" id="generateBtn">Generate Pairing</button>
+            <button class="muted" id="saveBtn" title="Simpan pairing ke browser ini">Save</button>
+            <button class="muted" id="loadBtn" title="Ambil pairing dari browser ini">Load</button>
+            <button class="danger" id="resetBtn" title="Hapus pairing & input">Reset</button>
+          </div>
+
+          <div class="status" id="setupStatus">
+            Masukkan nama peserta lalu klik <strong>Generate Pairing</strong>.
+          </div>
+
+          <div class="hint">
+            Catatan: ini jalan <strong>100% di browser</strong> (tanpa server). Kalau mau “lebih secret”, jalankan di satu device, suruh tiap orang maju gantian pilih namanya dan <strong>tekan-tahan</strong> tombol reveal.
+          </div>
+        </div>
+      </section>
+
+      <!-- REVEAL -->
+      <section class="card">
+        <div class="hd">
+          <strong>Reveal</strong>
+          <span class="kbd">hold-to-reveal</span>
+        </div>
+        <div class="bd">
+          <label for="picker">Pilih namamu</label>
+          <select id="picker" disabled>
+            <option value="">— generate dulu —</option>
+          </select>
+
+          <div class="btns">
+            <button class="ok" id="holdBtn" disabled>Hold to Reveal</button>
+            <button id="toggleBtn" disabled title="Alternatif kalau device nggak enak buat hold">Toggle Reveal</button>
+          </div>
+
+          <div class="revealBox hidden" id="revealBox" aria-live="polite">
+            <p class="big" id="revealTitle">🎁 Kamu dapat: …</p>
+            <div class="gift" id="revealMeta"></div>
+          </div>
+
+          <footer>
+            Tips anti-ngintip: yang lain jangan lihat layar. Kalau perlu, setelah reveal langsung scroll sedikit atau tutup kotak reveal.
+          </footer>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ===== Utilities =====
+    const $ = (id) => document.getElementById(id);
+
+    function uniqTrimmedLines(text){
+      const raw = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+      const seen = new Set();
+      const out = [];
+      for (const n of raw){
+        const key = n.toLowerCase();
+        if (!seen.has(key)){
+          seen.add(key);
+          out.push(n);
+        }
+      }
+      return out;
+    }
+
+    function shuffle(arr){
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    // Generate a derangement (no one gets themselves).
+    // For small N, repeat-shuffle is practical + simple.
+    function makeDerangement(names){
+      if (names.length < 2) return null;
+      const maxTries = 2000;
+      for (let t = 0; t < maxTries; t++){
+        const recipients = shuffle(names);
+        let ok = true;
+        for (let i = 0; i < names.length; i++){
+          if (recipients[i].toLowerCase() === names[i].toLowerCase()){
+            ok = false; break;
+          }
+        }
+        if (ok){
+          const map = {};
+          for (let i = 0; i < names.length; i++) map[names[i]] = recipients[i];
+          return map;
+        }
+      }
+      return null; // extremely unlikely unless N is tiny or constraints exist
+    }
+
+    function nowStamp(){
+      const d = new Date();
+      return d.toLocaleString('id-ID', { dateStyle:'medium', timeStyle:'short' });
+    }
+
+    // ===== State =====
+    const STORAGE_KEY = "secret_santa_pairing_v1";
+    let pairing = null;
+    let revealed = false;
+
+    function setStatus(msg, kind="info"){
+      const box = $("setupStatus");
+      box.innerHTML = msg;
+      box.style.borderColor =
+        kind === "ok" ? "rgba(35,196,131,.55)" :
+        kind === "bad" ? "rgba(255,77,109,.55)" :
+        "rgba(255,255,255,.12)";
+    }
+
+    function updateBadge(){
+      const b = $("persistBadge");
+      const saved = localStorage.getItem(STORAGE_KEY);
+      b.textContent = saved ? "Ada pairing tersimpan ✅" : "Tidak ada pairing tersimpan";
+    }
+
+    function enableRevealUI(enabled){
+      $("picker").disabled = !enabled;
+      $("holdBtn").disabled = !enabled;
+      $("toggleBtn").disabled = !enabled;
+      if (!enabled){
+        $("revealBox").classList.add("hidden");
+        revealed = false;
+      }
+    }
+
+    function fillPicker(names){
+      const sel = $("picker");
+      sel.innerHTML = "";
+      const opt0 = document.createElement("option");
+      opt0.value = "";
+      opt0.textContent = "— pilih namamu —";
+      sel.appendChild(opt0);
+      for (const n of names){
+        const o = document.createElement("option");
+        o.value = n;
+        o.textContent = n;
+        sel.appendChild(o);
+      }
+    }
+
+    function getMetaText(){
+      const ev = $("eventName").value.trim();
+      const budget = $("budget").value.trim();
+      const parts = [];
+      if (ev) parts.push(`Event: <strong>${escapeHtml(ev)}</strong>`);
+      if (budget) parts.push(`Budget: <strong>${escapeHtml(budget)}</strong>`);
+      return parts.length ? parts.join(" • ") : "Biar makin seru: isi nama event & budget di kiri 🙂";
+    }
+
+    function escapeHtml(s){
+      return s.replace(/[&<>"']/g, (c) => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+      }[c]));
+    }
+
+    function showReveal(show){
+      const who = $("picker").value;
+      if (!pairing || !who){
+        $("revealBox").classList.add("hidden");
+        return;
+      }
+      const target = pairing[who];
+      if (!target){
+        $("revealBox").classList.add("hidden");
+        return;
+      }
+      if (show){
+        $("revealTitle").textContent = `🎁 Kamu dapat: ${target}`;
+        $("revealMeta").innerHTML = getMetaText();
+        $("revealBox").classList.remove("hidden");
+      } else {
+        $("revealBox").classList.add("hidden");
+      }
+      revealed = show;
+    }
+
+    // ===== Actions =====
+    $("generateBtn").addEventListener("click", () => {
+      const names = uniqTrimmedLines($("names").value);
+      if (names.length < 2){
+        setStatus("Minimal 2 peserta ya. (Kalau 1 orang… ya kamu ngadoin diri sendiri 😭)", "bad");
+        pairing = null;
+        enableRevealUI(false);
+        return;
+      }
+
+      const map = makeDerangement(names);
+      if (!map){
+        setStatus("Gagal generate pairing. Coba klik Generate lagi (random).", "bad");
+        pairing = null;
+        enableRevealUI(false);
+        return;
+      }
+
+      pairing = map;
+      fillPicker(names);
+      enableRevealUI(true);
+      $("picker").value = "";
+      showReveal(false);
+
+      setStatus(
+        `Pairing berhasil dibuat untuk <strong>${names.length}</strong> peserta. ` +
+        `Silakan pilih nama di panel Reveal. <span class="kbd">Generated: ${nowStamp()}</span>`,
+        "ok"
+      );
+    });
+
+    $("saveBtn").addEventListener("click", () => {
+      if (!pairing){
+        setStatus("Belum ada pairing untuk disimpan. Generate dulu ya.", "bad");
+        return;
+      }
+      const payload = {
+        pairing,
+        eventName: $("eventName").value.trim(),
+        budget: $("budget").value.trim(),
+        savedAt: new Date().toISOString()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      updateBadge();
+      setStatus("Pairing tersimpan di browser ini ✅ (localStorage).", "ok");
+    });
+
+    $("loadBtn").addEventListener("click", () => {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved){
+        setStatus("Belum ada pairing tersimpan di browser ini.", "bad");
+        return;
+      }
+      try{
+        const payload = JSON.parse(saved);
+        pairing = payload.pairing || null;
+        $("eventName").value = payload.eventName || "";
+        $("budget").value = payload.budget || "";
+        const names = pairing ? Object.keys(pairing) : [];
+        if (!pairing || names.length < 2){
+          setStatus("Data tersimpan rusak/kurang lengkap. Coba Generate ulang.", "bad");
+          pairing = null;
+          enableRevealUI(false);
+          return;
+        }
+        fillPicker(names);
+        enableRevealUI(true);
+        $("picker").value = "";
+        showReveal(false);
+        setStatus(`Pairing berhasil di-load ✅ <span class="kbd">Saved: ${payload.savedAt ? new Date(payload.savedAt).toLocaleString('id-ID') : '-'}</span>`, "ok");
+      } catch(e){
+        setStatus("Gagal load pairing (format data salah).", "bad");
+      }
+      updateBadge();
+    });
+
+    $("resetBtn").addEventListener("click", () => {
+      pairing = null;
+      $("eventName").value = "";
+      $("budget").value = "";
+      $("names").value = "";
+      $("picker").innerHTML = `<option value="">— generate dulu —</option>`;
+      enableRevealUI(false);
+      setStatus("Reset selesai. Masukkan nama peserta lagi.", "info");
+    });
+
+    // Hold-to-reveal (mouse + touch)
+    const hold = $("holdBtn");
+    const startHold = (e) => { e.preventDefault(); showReveal(true); };
+    const endHold   = (e) => { e.preventDefault(); showReveal(false); };
+
+    hold.addEventListener("mousedown", startHold);
+    hold.addEventListener("mouseup", endHold);
+    hold.addEventListener("mouseleave", endHold);
+
+    hold.addEventListener("touchstart", startHold, {passive:false});
+    hold.addEventListener("touchend", endHold, {passive:false});
+    hold.addEventListener("touchcancel", endHold, {passive:false});
+
+    // Toggle reveal (fallback)
+    $("toggleBtn").addEventListener("click", () => {
+      showReveal(!revealed);
+    });
+
+    // Change selection hides reveal
+    $("picker").addEventListener("change", () => {
+      showReveal(false);
+    });
+
+    // init badge
+    updateBadge();
+  </script>
+</body>
+</html>
