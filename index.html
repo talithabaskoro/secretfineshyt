@@ -3,207 +3,577 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Secret Santa 🎁</title>
+  <title>Secret Santa // CLASSIFIED 🎁</title>
   <style>
     :root{
-      --bg:#0b1220;
-      --card:rgba(255,255,255,.06);
-      --card2:rgba(255,255,255,.09);
-      --text:#e8eefc;
-      --muted:rgba(232,238,252,.72);
-      --accent:#7c5cff;
-      --ok:#23c483;
-      --danger:#ff4d6d;
-      --border:rgba(255,255,255,.12);
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:16px;
-      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-      --sans:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      --phi: 1.61803398875;
+      --invphi: 0.61803398875;
+
+      --u: 10px;
+      --uφ: calc(var(--u) * var(--phi));
+      --uφ2: calc(var(--u) * var(--phi) * var(--phi));
+      --uInv: calc(var(--u) * var(--invphi));
+
+      --bg: #070b14;
+      --line: rgba(255,255,255,.12);
+      --text: #e9f1ff;
+      --muted: rgba(233,241,255,.70);
+
+      --red: #ff2d2d;
+      --green: #23d18b;
+      --amber: #ffd166;
+
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+
+      --radius: calc(var(--uφ) * 1.0);
+      --radius2: calc(var(--uφ) * 1.35);
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
-    *{box-sizing:border-box}
+
+    *{ box-sizing: border-box; }
+    html, body { height: 100%; }
     body{
       margin:0;
-      font-family:var(--sans);
+      font-family: var(--sans);
+      color: var(--text);
       background:
-        radial-gradient(1200px 800px at 30% 10%, rgba(124,92,255,.25), transparent 55%),
-        radial-gradient(900px 700px at 80% 35%, rgba(35,196,131,.18), transparent 55%),
+        radial-gradient(1200px 800px at 18% 12%, rgba(35,209,139,.12), transparent 60%),
+        radial-gradient(1000px 700px at 80% 25%, rgba(255,45,45,.10), transparent 55%),
+        radial-gradient(900px 650px at 45% 85%, rgba(255,209,102,.08), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%),
         var(--bg);
-      color:var(--text);
-      min-height:100vh;
+      overflow-x:hidden;
     }
-    .wrap{max-width:980px;margin:0 auto;padding:28px 18px 60px;}
-    header{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;margin-bottom:18px;}
-    h1{margin:0;font-size:28px;letter-spacing:.2px}
-    .sub{margin-top:6px;color:var(--muted);line-height:1.4}
+
+    /* ops grid + scanlines */
+    body::before{
+      content:"";
+      position: fixed; inset: 0;
+      background:
+        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: calc(var(--uφ2) * 1.9) calc(var(--uφ2) * 1.9);
+      opacity: .12;
+      pointer-events:none;
+      mix-blend-mode: overlay;
+    }
+    body::after{
+      content:"";
+      position: fixed; inset:0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.045) 0px,
+        rgba(255,255,255,.045) 1px,
+        transparent 2px,
+        transparent 5px
+      );
+      opacity:.06;
+      pointer-events:none;
+    }
+
+    .wrap{
+      max-width: calc(720px + (260px * var(--phi)));
+      margin: 0 auto;
+      padding: calc(var(--uφ2) * 1.0) calc(var(--uφ) * 1.0) calc(var(--uφ2) * 1.8);
+    }
+
+    header{
+      display:flex;
+      gap: var(--uφ);
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: var(--uφ);
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap: calc(var(--uInv) * 1.2);
+      max-width: 75ch;
+    }
+
+    h1{
+      margin:0;
+      font-family: var(--mono);
+      letter-spacing: .14em;
+      font-weight: 900;
+      font-size: clamp(22px, calc(16px * var(--phi)), 34px);
+      text-transform: uppercase;
+      position: relative;
+    }
+    /* subtle glitch shimmer */
+    h1::after{
+      content: attr(data-glitch);
+      position:absolute;
+      left:0; top:0;
+      color: rgba(35,209,139,.28);
+      transform: translate(1px, 0);
+      mix-blend-mode: screen;
+      opacity: .45;
+      animation: glitch 4.2s infinite ease-in-out;
+      pointer-events:none;
+    }
+    @keyframes glitch{
+      0%, 92%, 100% { transform: translate(1px, 0); opacity:.38; }
+      93% { transform: translate(-2px, 0); opacity:.55; }
+      94% { transform: translate(2px, -1px); opacity:.42; }
+      95% { transform: translate(-1px, 1px); opacity:.50; }
+      96% { transform: translate(1px, 0); opacity:.38; }
+    }
+
+    .sub{
+      color: var(--muted);
+      line-height: calc(1.0 * var(--phi));
+      font-size: clamp(13px, 1.45vw, 15px);
+    }
+
+    .topControls{
+      display:flex;
+      gap: calc(var(--uInv) * 1.2);
+      align-items:center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
     .badge{
-      font-size:12px;color:var(--muted);
-      border:1px solid var(--border);
-      padding:8px 10px;border-radius:999px;
-      background:rgba(255,255,255,.03);
-      white-space:nowrap;height:fit-content;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      padding: calc(var(--uInv) * 1.6) calc(var(--uφ) * .9);
+      border-radius: 999px;
+      background: rgba(255,255,255,.03);
+      white-space:nowrap;
+      height: fit-content;
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      display:flex;
+      gap: 10px;
+      align-items:center;
     }
-    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px;}
+
+    .dot{
+      display:inline-block;
+      width: 8px; height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--red), var(--green));
+      box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+      vertical-align: middle;
+    }
+
+    .recDot{
+      width: 8px; height: 8px; border-radius: 999px;
+      background: var(--red);
+      box-shadow: 0 0 0 3px rgba(255,45,45,.12);
+      animation: recPulse 1.2s infinite ease-in-out;
+    }
+    @keyframes recPulse{
+      0%, 100%{ opacity:.35; }
+      50%{ opacity:.95; }
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--uφ);
+      margin-top: var(--uφ);
+    }
+
     .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
+      position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.045));
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
-    .card .hd{
-      padding:14px 16px;
-      background:rgba(255,255,255,.03);
-      border-bottom:1px solid var(--border);
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
+
+    .card::before{
+      content:"CLASSIFIED";
+      position:absolute;
+      top: calc(var(--uInv) * 1.2);
+      right: calc(var(--uInv) * 1.2);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .22em;
+      color: rgba(255,255,255,.38);
+      border: 1px dashed rgba(255,255,255,.18);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.20);
+      transform: rotate(2deg);
+      pointer-events:none;
+      animation: stampPulse 3.6s infinite ease-in-out;
     }
-    .card .bd{padding:16px;}
-    label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px;}
-    input[type="password"], input[type="text"], select{
+    @keyframes stampPulse{
+      0%, 100% { opacity:.35; filter: blur(0px); }
+      50% { opacity:.55; filter: blur(.15px); }
+    }
+
+    .hd{
+      padding: calc(var(--uφ) * .95) calc(var(--uφ) * 1.05);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(600px 180px at 20% 50%, rgba(35,209,139,.12), transparent 70%),
+        radial-gradient(600px 180px at 80% 50%, rgba(255,45,45,.10), transparent 70%),
+        rgba(255,255,255,.03);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: var(--uφ);
+    }
+
+    .hd strong{
+      font-family: var(--mono);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-size: 13px;
+      opacity:.95;
+    }
+
+    .tag{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+    }
+
+    .bd{ padding: calc(var(--uφ) * 1.15); }
+
+    label{
+      display:block;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(233,241,255,.72);
+      margin-bottom: calc(var(--uInv) * 1.2);
+    }
+
+    select, input[type="password"], input[type="text"]{
       width:100%;
-      padding:12px 12px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:rgba(0,0,0,.18);
-      color:var(--text);
+      padding: calc(var(--uφ) * .85) calc(var(--uφ) * .85);
+      border-radius: calc(var(--radius) * .85);
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.18));
+      color: var(--text);
       outline:none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
     }
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-    @media (max-width:560px){.row{grid-template-columns:1fr}}
-    .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+    select:focus, input:focus{
+      border-color: rgba(255,255,255,.24);
+      box-shadow: 0 0 0 4px rgba(124,92,255,.10);
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--uφ);
+    }
+    @media (max-width: 720px){
+      .row{ grid-template-columns: 1fr; }
+      header{ flex-direction: column; }
+      .topControls{ justify-content:flex-start; }
+    }
+
+    .btns{
+      display:flex;
+      flex-wrap:wrap;
+      gap: calc(var(--uInv) * 1.3);
+      margin-top: var(--uφ);
+      align-items:center;
+    }
+
     button{
-      appearance:none;border:none;
-      padding:11px 14px;border-radius:12px;
-      cursor:pointer;font-weight:650;
-      background:var(--card2);color:var(--text);
-      border:1px solid var(--border);
-      transition:transform .06s ease, opacity .2s ease, background .2s ease;
+      appearance:none;
+      border:none;
+      padding: calc(var(--uφ) * .78) calc(var(--uφ) * 1.0);
+      border-radius: calc(var(--radius) * .95);
+      cursor:pointer;
+      font-weight: 900;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      font-size: 12px;
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.15);
+      transition: transform .08s ease, filter .2s ease, background .2s ease, border-color .2s ease;
       user-select:none;
     }
-    button:active{transform:translateY(1px)}
-    .primary{background:rgba(124,92,255,.25);border-color:rgba(124,92,255,.55);}
-    .ok{background:rgba(35,196,131,.18);border-color:rgba(35,196,131,.55);}
-    .danger{background:rgba(255,77,109,.16);border-color:rgba(255,77,109,.55);}
-    .muted{opacity:.88;font-weight:600;}
+    button:hover{ filter: brightness(1.06); }
+    button:active{ transform: translateY(1px) scale(.99); }
+
+    .primary{
+      background: linear-gradient(90deg, rgba(255,45,45,.22), rgba(35,209,139,.18));
+      border-color: rgba(255,255,255,.20);
+    }
+    .ok{
+      background: linear-gradient(90deg, rgba(35,209,139,.25), rgba(35,209,139,.10));
+      border-color: rgba(35,209,139,.40);
+    }
+    .danger{
+      background: linear-gradient(90deg, rgba(255,45,45,.25), rgba(255,45,45,.10));
+      border-color: rgba(255,45,45,.45);
+    }
+    .muted{
+      opacity:.92;
+      background: rgba(255,255,255,.06);
+    }
+
+    .pill{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      color: rgba(233,241,255,.70);
+    }
+    .pill.red{ border-color: rgba(255,45,45,.35); }
+    .pill.green{ border-color: rgba(35,209,139,.35); }
+    .pill.amber{ border-color: rgba(255,209,102,.35); }
+
     .status{
-      margin-top:10px;padding:10px 12px;border-radius:12px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.03);
-      color:var(--muted);font-size:13px;line-height:1.45;
+      margin-top: var(--uφ);
+      padding: calc(var(--uφ) * .85) calc(var(--uφ) * .95);
+      border-radius: calc(var(--radius) * 1.0);
+      border:1px solid rgba(255,255,255,.13);
+      background: rgba(0,0,0,.14);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: calc(1.0 * var(--phi));
     }
-    .status strong{color:var(--text)}
-    .hidden{display:none!important;}
+    .status strong{ color: var(--text); }
+
+    .typing::after{
+      content:"▌";
+      display:inline-block;
+      margin-left: 6px;
+      color: rgba(233,241,255,.75);
+      animation: blink 0.9s infinite;
+      vertical-align: baseline;
+    }
+    @keyframes blink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+    .hidden{ display:none!important; }
+
     .revealBox{
-      margin-top:14px;border-radius:14px;
-      border:1px dashed rgba(255,255,255,.22);
-      padding:14px;background:rgba(0,0,0,.14);
+      margin-top: var(--uφ);
+      border-radius: calc(var(--radius2) * .9);
+      border: 1px dashed rgba(255,255,255,.22);
+      padding: calc(var(--uφ) * .95);
+      background:
+        radial-gradient(550px 220px at 20% 30%, rgba(255,45,45,.12), transparent 65%),
+        radial-gradient(550px 220px at 80% 40%, rgba(35,209,139,.12), transparent 65%),
+        rgba(0,0,0,.16);
+      animation: popIn .22s ease-out;
     }
-    .big{font-size:18px;margin:0;font-weight:800;letter-spacing:.2px}
-    .gift{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.45}
-    .kbd{
-      font-family:var(--mono);
-      font-size:12px;padding:2px 8px;border:1px solid var(--border);
-      border-radius:999px;background:rgba(255,255,255,.04);color:var(--muted);
+    @keyframes popIn{
+      from{ transform: translateY(8px); opacity: 0; }
+      to{ transform: translateY(0); opacity: 1; }
     }
-    footer{margin-top:14px;color:rgba(232,238,252,.55);font-size:12px;line-height:1.4}
+
+    .big{
+      margin:0;
+      font-size: clamp(16px, calc(14px * var(--phi)), 22px);
+      font-weight: 900;
+      letter-spacing: .06em;
+      font-family: var(--mono);
+      text-transform: uppercase;
+    }
+    .gift{
+      margin-top: calc(var(--uInv) * 1.2);
+      font-size: 14px;
+      color: rgba(233,241,255,.74);
+      line-height: calc(1.0 * var(--phi));
+    }
+
+    .meter{
+      margin-top: calc(var(--uInv) * 1.2);
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      overflow:hidden;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
+    }
+    .meter > div{
+      height:100%;
+      width:0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,45,45,.70), rgba(35,209,139,.70), rgba(255,209,102,.55));
+      transition: width .18s ease;
+    }
+
+    footer{
+      margin-top: var(--uφ);
+      color: rgba(233,241,255,.55);
+      font-size: 12px;
+      line-height: calc(1.0 * var(--phi));
+    }
+
+    /* Confetti canvas overlay */
+    #confetti{
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+    #confetti.on{ opacity: 1; }
+    #confetti.fade{ opacity: 0; }
+
+    @media (prefers-reduced-motion: reduce){
+      .revealBox{ animation: none; }
+      #confetti{ display:none; }
+      .typing::after{ display:none; }
+      h1::after{ display:none; }
+      .card::before{ animation: none; }
+      .recDot{ animation:none; }
+    }
   </style>
 </head>
 <body>
+  <canvas id="confetti"></canvas>
+
   <div class="wrap">
     <header>
-      <div>
-        <h1>Secret Santa 🎁</h1>
+      <div class="brand">
+        <h1 data-glitch="SECRET SANTA // OPS">SECRET SANTA // OPS</h1>
         <div class="sub">
-          Login pakai <span class="kbd">Nama</span> + <span class="kbd">Password</span>,
-          lalu <span class="kbd">Hold to Reveal</span>.
+          Peserta: <span class="pill red">Baskoro</span> <span class="pill">Afi</span> <span class="pill">Ami</span>
+          <span class="pill">Agung</span> <span class="pill">Talitha</span> <span class="pill">Zhafa</span> <span class="pill green">Rani</span>.
+          Login pakai <span class="pill green">Passcode</span>, lalu <span class="pill amber">Hold to Reveal</span>.
+          Nama akan hilang setelah sukses login (di device ini).
         </div>
       </div>
-      <div class="badge">Pairing fixed (encrypted) ✅</div>
+
+      <div class="topControls">
+        <div class="badge" title="Pairing fixed, disimpan encrypted per-user">
+          <span class="dot"></span><span>PAIRING FIXED (ENCRYPTED)</span>
+        </div>
+
+        <div class="badge" id="cctvBadge" title="Fake CCTV timestamp (Asia/Jakarta)">
+          <span class="recDot"></span>
+          <span id="camText">CAM-07 • REC • --:--:-- WIB</span>
+        </div>
+
+        <button class="muted" id="soundBtn" type="button" aria-label="Toggle sound">SOUND: OFF</button>
+      </div>
     </header>
 
-    <!-- LOGIN -->
-    <section class="card" id="loginCard">
-      <div class="hd">
-        <strong>Login</strong>
-        <span class="kbd">12 members</span>
-      </div>
-      <div class="bd">
-        <div class="row">
-          <div>
-            <label for="nameSel">Nama</label>
-            <select id="nameSel">
-              <option value="">— pilih namamu —</option>
-            </select>
-          </div>
-          <div>
-            <label for="pw">Password</label>
-            <input id="pw" type="password" placeholder="contoh: Namamu##" autocomplete="off" />
-            <div style="margin-top:10px; display:flex; gap:10px; align-items:center;">
-              <button class="muted" id="showPwBtn" type="button">Show</button>
-              <span class="kbd">jangan pakai password asli ya</span>
+    <div class="grid">
+      <!-- LOGIN -->
+      <section class="card" id="loginCard">
+        <div class="hd">
+          <strong>Access Terminal</strong>
+          <span class="tag" id="agentsTag">7 Agents</span>
+        </div>
+        <div class="bd">
+          <div class="row">
+            <div>
+              <label for="nameSel">Agent Name</label>
+              <select id="nameSel">
+                <option value="">— pilih namamu —</option>
+              </select>
+              <div class="btns" style="margin-top: calc(var(--uInv) * 1.3);">
+                <span class="pill" id="remainingPill">Remaining: —</span>
+              </div>
+            </div>
+
+            <div>
+              <label for="pw">Passcode</label>
+              <input id="pw" type="password" placeholder="contoh: Namamu##" autocomplete="off" />
+              <div class="btns" style="margin-top: calc(var(--uInv) * 1.3);">
+                <button class="muted" id="showPwBtn" type="button">SHOW / HIDE</button>
+                <button class="danger" id="resetTerminalBtn" type="button">RESET TERMINAL</button>
+              </div>
             </div>
           </div>
+
+          <div class="btns">
+            <button class="primary" id="loginBtn" type="button">Authorize</button>
+          </div>
+
+          <div class="status" id="loginStatus">Booting terminal…</div>
+          <div class="meter" id="authMeterWrap"><div id="authMeter"></div></div>
+
+          <footer>
+            Note: “nama hilang” dan “mission completed” disimpan di <span class="pill">sessionStorage</span> (per-device session).
+            Kalau browser ditutup total, list bisa balik.
+          </footer>
         </div>
+      </section>
 
-        <div class="btns">
-          <button class="primary" id="loginBtn" type="button">Login</button>
+      <!-- MISSION COMPLETED (anti re-login vibe) -->
+      <section class="card hidden" id="completeCard">
+        <div class="hd">
+          <strong>Access Denied</strong>
+          <span class="tag">MISSION LOG</span>
         </div>
+        <div class="bd">
+          <p class="big" id="completeTitle">AGENT COMPLETED</p>
+          <div class="gift" id="completeText">
+            Agent ini sudah menyelesaikan misi di device ini. Jangan coba-coba ya.
+          </div>
 
-        <div class="status" id="loginStatus">
-          Pilih nama, masukkan password, lalu login. Setelah itu, kamu bisa reveal hadiahmu.
-        </div>
+          <div class="btns">
+            <button class="muted" id="backBtn" type="button">Back</button>
+            <button class="danger" id="resetFromCompleteBtn" type="button">Reset Terminal</button>
+          </div>
 
-        <footer>
-          Catatan: Ini bukan sistem keamanan serius (for fun). Kalau mau lebih aman, pakai repo private (kalau plan GitHub kamu mendukung Pages untuk private).
-        </footer>
-      </div>
-    </section>
-
-    <!-- REVEAL -->
-    <section class="card hidden" id="revealCard">
-      <div class="hd">
-        <strong>Reveal</strong>
-        <span class="kbd" id="whoBadge">—</span>
-      </div>
-      <div class="bd">
-        <div class="btns">
-          <button class="ok" id="holdBtn" type="button">Hold to Reveal</button>
-          <button id="toggleBtn" type="button">Toggle Reveal</button>
-          <button class="danger" id="logoutBtn" type="button">Logout</button>
-        </div>
-
-        <div class="revealBox hidden" id="revealBox" aria-live="polite">
-          <p class="big" id="revealTitle">🎁 Kamu dapat: …</p>
-          <div class="gift" id="revealHint">
-            Lepas tombol untuk menyembunyikan lagi. (Biar yang lain nggak ngintip.)
+          <div class="status" id="completeStatus">
+            Tip: reset hanya kalau ini device admin / buat testing.
           </div>
         </div>
+      </section>
 
-        <div class="status" id="revealStatus">
-          Tips: yang lain jangan lihat layar. Kamu bisa tahan tombol reveal sebentar aja terus lepas.
+      <!-- REVEAL -->
+      <section class="card hidden" id="revealCard">
+        <div class="hd">
+          <strong>Mission Reveal</strong>
+          <span class="tag" id="whoBadge">—</span>
         </div>
-      </div>
-    </section>
+        <div class="bd">
+          <div class="btns">
+            <button class="ok" id="holdBtn" type="button">Hold to Reveal</button>
+            <button id="toggleBtn" type="button">Toggle</button>
+            <button class="danger" id="logoutBtn" type="button">Logout</button>
+          </div>
+
+          <div class="revealBox hidden" id="revealBox" aria-live="polite">
+            <p class="big" id="revealTitle">🎁 Target: …</p>
+            <div class="gift" id="revealHint">
+              Lepas tombol untuk menyembunyikan lagi. Jangan bocorin intel.
+            </div>
+          </div>
+
+          <div class="status" id="revealStatus">Ready.</div>
+        </div>
+      </section>
+    </div>
   </div>
 
   <script>
     // ==========================================================
-    // Users + pairing are FIXED and stored ENCRYPTED per user.
-    // No plaintext "who gets who" appears in the code.
+    // Participants (revised to 7) + fixed pairing encrypted per-user
     // ==========================================================
-
     const USERS = [
-      {"name":"Baskoro","salt":"xEz1Y1bxXsRYzohqmaX2rA==","iter":120000,"verifier":"D9Fjs+8x0YsQhQQqDZSFplNzga/TQXT63Tn+hW7p5AI=","iv":"ArBZKG6DPGdVLbYm","ct":"S1blfBSfwb8aHj+hNoQgmKEdAQ=="},
-      {"name":"Talitha","salt":"jMZQ2TudW3Wmftolnn7kIg==","iter":120000,"verifier":"8hyNrzxx2sarmyhd/xQ5rjVkOfBPXRvgrqlNY4n8R5I=","iv":"VCL5AbzWgYZ6uDUv","ct":"5HYh9cQkBgNqU51R/YST8NwyjQ=="},
-      {"name":"Afi","salt":"dZ3Tdu5ebqC/ivtuu7EwXA==","iter":120000,"verifier":"ykhZDgvS+TcEWCbTHsvnKgqITstMHoy4ydoHfx4n89c=","iv":"csO2de6Ugmm3amYy","ct":"xjZsbfx/jOXHwL5Pzkas44dmHA=="},
-      {"name":"Ami","salt":"5gcYBtEpLhBsZjKTJYqkrg==","iter":120000,"verifier":"b2TGknkYzPGXRq2IX/NqiXlYqH46cd2NbmkhIdKBdY0=","iv":"iFtkyOBBoJsoEYRb","ct":"L74HEZ1oFOTYULV+KY3p3eTwnanC8ow="},
-      {"name":"Agung","salt":"gS+OLOnHT1mTmQM/SNVE4A==","iter":120000,"verifier":"mprwxEFcwJFWRo3/+1UB2l3e0SL5q1vA8eXAaYnS7Fg=","iv":"DNF7DtGNgg5tXigx","ct":"QOnEqgmlj9TP52oYQPKPqWZjXTk="},
-      {"name":"Sae","salt":"GitR+icqB81Qu7aKm0TeoA==","iter":120000,"verifier":"7lOglfD51PbjQEGyebBjoSuz6BsHVrS5TmnjNbwy4uA=","iv":"6lTmUhoIaUf73Tzu","ct":"YBmQyfuPPSQWHkLvrdfcme7JJr4="},
-      {"name":"Icha","salt":"zmVx0IBI1SrJIXE0U4ZOhg==","iter":120000,"verifier":"LVMBDEJHfeCuAyUNxLnoSlqPB9CETC+CQwx6+mRzVT0=","iv":"QmD3H0zHg7mHq3Q2","ct":"LDQ3862O1XwbDEtpyMW+sfhTElHv"},
-      {"name":"Lili","salt":"w9G675xCKjUH6L2Bcig/Sg==","iter":120000,"verifier":"McpQG1viy7amPsfIoiL8/pgUVixERDf8N4m6c8rRLHo=","iv":"YOWWi6q5OygeSrgC","ct":"1og9tUgDEV3O44GFPYqkCLDc/N41"},
-      {"name":"Zhafa","salt":"icvucw1CfuOq4WNnb0aDMA==","iter":120000,"verifier":"bC23c5N9gL82Zfs5f/3248VomdcZaVwHeoqfTBkp0xc=","iv":"kHy9DB1FXnF+elQZ","ct":"HwOMAclFRVuVj0cFifcFNTHTq4bE"},
-      {"name":"Zakky","salt":"0abK8LGef8Rh4HBtOkADJA==","iter":120000,"verifier":"zdYo1Yjw7NPsEjVYMWP5lLcPPTAJxbSd4p80cqxJrjU=","iv":"ynb1fsLE5Pen01uN","ct":"gqwmpToBtYiGBPK1cgp+NWGs0F0="},
-      {"name":"Gladhys","salt":"LK7jeUhgWHh+A3PnhvSFvQ==","iter":120000,"verifier":"/0ogEGRD7+g6NfV8iVA26JpLinByZFuyRgm0jSFjwyQ=","iv":"T2jif+BAcj+gZIr/","ct":"FPL5Gfep3DgQRF+lbfY31PcCQndhE/A="},
-      {"name":"Rani","salt":"SpNqSXAtc3WGEMdmplrqYg==","iter":120000,"verifier":"e1NiKtjGk7OiIfDNrxAqg/G6W9i1JQnDkpws+te0KMU=","iv":"9viTu96FrYd4dufZ","ct":"+OXFtznLfG2GgMSfkRY9HSDxAApUrVI="}
+      {"name":"Baskoro","salt":"NIs1SNqMnfs9J82mTp7AMg==","iter":120000,"verifier":"oo6qQqOXZTRk0BJ95FsG/cVPD3nhd/ni1NhkeexOL4o=","iv":"1P5izML6jY5UkGSv","ct":"31Pv+wjFAzwX07ZqLWv9bnJC4g=="},
+      {"name":"Afi","salt":"p87IbUBRpIYdqkRlT+sewQ==","iter":120000,"verifier":"fpEQHhD1Nn+rovjaO7acrngu/Fhna312bq1iJQij9Pc=","iv":"DP/kIr1ahaS81ch7","ct":"9yepa35f8arI7gfCUImMnwpHAA=="},
+      {"name":"Ami","salt":"G19XFEW3vIMoUXBEK1xSig==","iter":120000,"verifier":"47/oiO2xeT7okjfQF/tgQfl4EUkcSfYU9/VoSI8Ug64=","iv":"zYj57fPNnEN5sCBD","ct":"c0xgbjVR+BxTGKLK91NrZtzmFyHz078="},
+      {"name":"Agung","salt":"ZnS0skzJyH6DZcPFo+cVmw==","iter":120000,"verifier":"rXXsskrie2h1hp3V2S4FO54twkcGycnPW1HdfRnrvSw=","iv":"NS6zjqY46CDY+VSS","ct":"gw+YjNRUKcVC74oKfgQ4GOQGZ43l"},
+      {"name":"Talitha","salt":"cbJ2EYmTW1Tx0x07x9I6Qg==","iter":120000,"verifier":"ZI00yPcsMsv5pIzx82hcVbUXjMHZWY8qnnpJR2N/X3E=","iv":"eflYRSfbJyv4atL3","ct":"pBWanv5oRqfTufrbBGYmJvswlhwxOQc="},
+      {"name":"Zhafa","salt":"WUEb1oJ4q9mEIYv/ocr6Wg==","iter":120000,"verifier":"MSx5h4lz/JO18HJB1X3CQf5Iia+KsI6zpQ7LfreX95E=","iv":"qH+OimzZXmNRkieE","ct":"fL13w2rDStBRGvUbkbwBgNEHEic="},
+      {"name":"Rani","salt":"I6CGfEFWH5QSNISH5+Uo9w==","iter":120000,"verifier":"d9ScQdI095ASJHR/Q4VETisBvX8P4DkoiO+H0r4yNG0=","iv":"JdpYzJmEeeo7L5WX","ct":"oP6g0kcqrqyyZ3J+OfHoo107hE7r"}
     ];
 
     // ---------- helpers ----------
@@ -222,35 +592,147 @@
       for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
       return btoa(bin);
     }
-    function setLoginStatus(html, kind="info"){
-      const box = $("loginStatus");
-      box.innerHTML = html;
-      box.style.borderColor =
-        kind === "ok" ? "rgba(35,196,131,.55)" :
-        kind === "bad" ? "rgba(255,77,109,.55)" :
-        "rgba(255,255,255,.12)";
+
+    // ==========================================================
+    // Fake CCTV timestamp (Asia/Jakarta)
+    // ==========================================================
+    function pad2(n){ return String(n).padStart(2,"0"); }
+    function updateCam(){
+      const now = new Date();
+      const jkt = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
+      const y = jkt.getFullYear();
+      const m = pad2(jkt.getMonth()+1);
+      const d = pad2(jkt.getDate());
+      const hh = pad2(jkt.getHours());
+      const mm = pad2(jkt.getMinutes());
+      const ss = pad2(jkt.getSeconds());
+      $("camText").textContent = `CAM-07 • REC • ${y}-${m}-${d} ${hh}:${mm}:${ss} WIB`;
     }
-    function setRevealStatus(html, kind="info"){
-      const box = $("revealStatus");
-      box.innerHTML = html;
-      box.style.borderColor =
-        kind === "ok" ? "rgba(35,196,131,.55)" :
-        kind === "bad" ? "rgba(255,77,109,.55)" :
-        "rgba(255,255,255,.12)";
+    updateCam();
+    setInterval(updateCam, 1000);
+
+    // ==========================================================
+    // Sound (WebAudio) – no external files
+    // ==========================================================
+    const SOUND_KEY = "ss_sound_on_v2";
+    let SOUND_ON = localStorage.getItem(SOUND_KEY) === "1";
+    let audioCtx = null;
+
+    function setSoundUI(){
+      $("soundBtn").textContent = `SOUND: ${SOUND_ON ? "ON" : "OFF"}`;
+      $("soundBtn").classList.toggle("ok", SOUND_ON);
+      $("soundBtn").classList.toggle("muted", !SOUND_ON);
+    }
+    function ensureAudio(){
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume().catch(()=>{});
+    }
+    function beep(freq=440, dur=0.06, type="sine", gain=0.035){
+      if (!SOUND_ON) return;
+      try{
+        ensureAudio();
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = type;
+        o.frequency.value = freq;
+        g.gain.value = gain;
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        const t = audioCtx.currentTime;
+        g.gain.setValueAtTime(gain, t);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.start(t);
+        o.stop(t + dur);
+      } catch {}
+    }
+    function chirp(){
+      if (!SOUND_ON) return;
+      beep(660, 0.05, "triangle", 0.03);
+      setTimeout(()=>beep(880, 0.05, "triangle", 0.03), 70);
+    }
+    function warn(){
+      if (!SOUND_ON) return;
+      beep(220, 0.08, "sawtooth", 0.02);
+      setTimeout(()=>beep(196, 0.10, "sawtooth", 0.02), 95);
     }
 
-    // ---------- fill name dropdown ----------
-    const nameSel = $("nameSel");
-    USERS.map(u => u.name).sort((a,b)=>a.localeCompare(b,"id")).forEach(n=>{
-      const o=document.createElement("option");
-      o.value=n; o.textContent=n;
-      nameSel.appendChild(o);
+    $("soundBtn").addEventListener("click", ()=>{
+      SOUND_ON = !SOUND_ON;
+      localStorage.setItem(SOUND_KEY, SOUND_ON ? "1" : "0");
+      setSoundUI();
+      chirp();
     });
+    setSoundUI();
 
-    // ---------- session state ----------
-    let current = null; // { name, recipient }
-    let revealed = false;
+    // ==========================================================
+    // Terminal typing
+    // ==========================================================
+    async function typeTo(el, text, {speed=16, keepCursor=false} = {}){
+      el.classList.add("typing");
+      el.textContent = "";
+      for (let i = 0; i < text.length; i++){
+        el.textContent += text[i];
+        if (i % 3 === 0) beep(520 + (i % 7)*25, 0.02, "sine", 0.010);
+        await new Promise(r => setTimeout(r, speed));
+      }
+      if (!keepCursor) el.classList.remove("typing");
+    }
 
+    // ==========================================================
+    // Used agents lockout (per device session)
+    // ==========================================================
+    const USED_KEY = "ss_used_agents_v2"; // sessionStorage
+    function getUsed(){
+      try { return JSON.parse(sessionStorage.getItem(USED_KEY) || "[]"); } catch { return []; }
+    }
+    function setUsed(arr){ sessionStorage.setItem(USED_KEY, JSON.stringify(arr)); }
+    function markUsed(name){
+      const u = new Set(getUsed());
+      u.add(name);
+      setUsed([...u]);
+    }
+    function clearUsed(){ sessionStorage.removeItem(USED_KEY); }
+
+    // per-agent first reveal confetti flag
+    function revealKey(name){ return `ss_first_reveal_${name}_v2`; }
+    function isFirstRevealDone(name){ return sessionStorage.getItem(revealKey(name)) === "1"; }
+    function setFirstRevealDone(name){ sessionStorage.setItem(revealKey(name), "1"); }
+
+    function refreshDropdown(){
+      const used = new Set(getUsed().map(x=>String(x)));
+      const all = USERS.map(u=>u.name).sort((a,b)=>a.localeCompare(b,"id"));
+      const available = all.filter(n => !used.has(n));
+
+      const sel = $("nameSel");
+      const currentVal = sel.value;
+      sel.innerHTML = `<option value="">— pilih namamu —</option>`;
+      for (const n of available){
+        const o = document.createElement("option");
+        o.value = n;
+        o.textContent = n;
+        sel.appendChild(o);
+      }
+      if (available.includes(currentVal)) sel.value = currentVal;
+
+      $("agentsTag").textContent = `${available.length} Remaining`;
+      $("remainingPill").textContent = `Remaining: ${available.length}/${all.length}`;
+    }
+    refreshDropdown();
+
+    // ==========================================================
+    // Progress meter
+    // ==========================================================
+    const meterWrap = $("authMeterWrap");
+    const meter = $("authMeter");
+    function setMeter(pct){ meter.style.width = Math.max(0, Math.min(100, pct)) + "%"; }
+    function showMeter(show){
+      meterWrap.style.display = show ? "block" : "none";
+      if (!show) setMeter(0);
+    }
+
+    // ==========================================================
+    // Crypto verify + decrypt
+    // ==========================================================
     async function verifyAndDecrypt(name, password){
       const user = USERS.find(u => u.name === name);
       if (!user) throw new Error("Nama tidak ditemukan.");
@@ -266,7 +748,7 @@
       const hashB64 = bytesToB64(new Uint8Array(hashBuf));
 
       if (hashB64 !== user.verifier){
-        throw new Error("Password salah.");
+        throw new Error("Passcode invalid.");
       }
 
       // derive AES-GCM key with PBKDF2
@@ -295,99 +777,312 @@
         ct
       );
 
-      return dec.decode(ptBuf); // recipient name (plaintext) — not stored in code
+      return dec.decode(ptBuf);
     }
+
+    // ==========================================================
+    // Confetti engine (multi-trigger)
+    // ==========================================================
+    const Confetti = (() => {
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d", { alpha:true });
+      let raf = 0;
+      let parts = [];
+      let lastT = 0;
+
+      const colors = ["#ff2d2d", "#23d18b", "#ffd166", "rgba(233,241,255,.9)"];
+
+      function resize(){
+        const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
+        canvas.width = Math.floor(window.innerWidth * dpr);
+        canvas.height = Math.floor(window.innerHeight * dpr);
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }
+      resize();
+      window.addEventListener("resize", resize);
+
+      function rand(a,b){ return a + Math.random()*(b-a); }
+
+      function spawn({count=140, originX=0.5, originY=0.0, spread=1.0, power=1.0, lifeMs=2400}){
+        const W = window.innerWidth, H = window.innerHeight;
+        const ox = W * originX;
+        const oy = H * originY;
+
+        parts = [];
+        for (let i=0;i<count;i++){
+          const angle = rand(-Math.PI*spread, Math.PI*spread);
+          const speed = rand(3.2, 7.6) * power;
+          parts.push({
+            x: ox + rand(-20,20),
+            y: oy + rand(-10,10),
+            vx: Math.cos(angle) * speed + rand(-1.2,1.2),
+            vy: Math.sin(angle) * speed - rand(2.5,5.0),
+            rot: rand(0, Math.PI*2),
+            vr: rand(-0.14, 0.14),
+            w: rand(6, 14),
+            h: rand(8, 18),
+            c: colors[(Math.random()*colors.length)|0],
+            life: rand(lifeMs*0.6, lifeMs),
+            max: lifeMs
+          });
+        }
+      }
+
+      function draw(t){
+        const dt = Math.min(32, t - (lastT || t));
+        lastT = t;
+
+        const W = window.innerWidth, H = window.innerHeight;
+        ctx.clearRect(0,0,W,H);
+
+        const gravity = 0.065;
+
+        for (const p of parts){
+          p.vy += gravity * (dt/16);
+          p.x += p.vx * (dt/16);
+          p.y += p.vy * (dt/16);
+          p.rot += p.vr * (dt/16);
+          p.life -= dt;
+
+          // wrap sideways
+          if (p.x < -30) p.x = W + 30;
+          if (p.x > W + 30) p.x = -30;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.c;
+          ctx.globalAlpha = Math.max(0, Math.min(1, p.life / Math.min(900, p.max)));
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+        }
+
+        parts = parts.filter(p => p.life > 0 && p.y < H + 80);
+
+        if (parts.length){
+          raf = requestAnimationFrame(draw);
+        } else {
+          canvas.classList.add("fade");
+          canvas.classList.remove("on");
+          setTimeout(()=>{ ctx.clearRect(0,0,window.innerWidth,window.innerHeight); canvas.classList.remove("fade"); }, 400);
+          raf = 0;
+          lastT = 0;
+        }
+      }
+
+      function burst(opts){
+        const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+        if (reduce) return;
+        if (!ctx) return;
+
+        if (raf) cancelAnimationFrame(raf);
+        canvas.classList.add("on");
+        canvas.classList.remove("fade");
+        spawn(opts);
+        raf = requestAnimationFrame(draw);
+      }
+
+      return { burst };
+    })();
+
+    // confetti on load
+    Confetti.burst({count: 160, originX: 0.5, originY: 0.0, spread: 0.8, power: 1.0, lifeMs: 2600});
+
+    // ==========================================================
+    // Mission screens
+    // ==========================================================
+    function showCompleted(name){
+      $("loginCard").classList.add("hidden");
+      $("revealCard").classList.add("hidden");
+      $("completeCard").classList.remove("hidden");
+      $("completeTitle").textContent = `MISSION COMPLETED`;
+      $("completeText").innerHTML = `Agent <strong>${name}</strong> sudah pernah login di device ini.<br/>Coba agent lain, atau reset terminal (kalau admin).`;
+      warn();
+      typeTo($("completeStatus"), "LOCKOUT ACTIVE. Unauthorized re-login prevented.", {speed: 14});
+    }
+    function backToLogin(){
+      $("completeCard").classList.add("hidden");
+      $("loginCard").classList.remove("hidden");
+      refreshDropdown();
+      beep(760, 0.04, "triangle", 0.02);
+    }
+
+    // ==========================================================
+    // Reveal flow
+    // ==========================================================
+    let current = null; // { name, recipient }
+    let revealed = false;
 
     function showReveal(show){
       if (!current) return;
       if (show){
-        $("revealTitle").textContent = `🎁 Kamu dapat: ${current.recipient}`;
+        $("revealTitle").textContent = `🎁 Target: ${current.recipient}`;
         $("revealBox").classList.remove("hidden");
+
+        // mini confetti only on FIRST reveal for this agent on this device session
+        if (!isFirstRevealDone(current.name)){
+          setFirstRevealDone(current.name);
+          Confetti.burst({count: 90, originX: 0.5, originY: 0.25, spread: 1.0, power: 0.95, lifeMs: 1400});
+          chirp();
+        } else {
+          beep(880, 0.04, "triangle", 0.02);
+        }
       } else {
         $("revealBox").classList.add("hidden");
       }
       revealed = show;
     }
 
-    function enterReveal(){
+    async function enterReveal(){
       $("loginCard").classList.add("hidden");
+      $("completeCard").classList.add("hidden");
       $("revealCard").classList.remove("hidden");
-      $("whoBadge").textContent = current?.name ? `Logged in: ${current.name}` : "—";
+      $("whoBadge").textContent = current?.name ? `Agent: ${current.name}` : "—";
       showReveal(false);
-      setRevealStatus("Tekan & tahan <strong>Hold to Reveal</strong> untuk melihat, lalu lepas untuk menyembunyikan lagi.", "ok");
+      await typeTo($("revealStatus"), "READY. Hold to reveal, release to hide.", {speed: 14});
     }
 
-    function logout(){
+    async function logout(){
       current = null;
       revealed = false;
       $("pw").value = "";
-      nameSel.value = "";
-      $("revealCard").classList.add("hidden");
-      $("loginCard").classList.remove("hidden");
       $("revealBox").classList.add("hidden");
-      setLoginStatus("Logout berhasil. Pilih nama lagi untuk login.", "ok");
+
+      beep(330, 0.05, "square", 0.02);
+      setTimeout(()=>beep(220, 0.07, "square", 0.02), 80);
+
+      $("revealCard").classList.add("hidden");
+      $("completeCard").classList.add("hidden");
+      $("loginCard").classList.remove("hidden");
+      refreshDropdown();
+
+      await typeTo($("loginStatus"), "SESSION ENDED. Select agent to authorize.", {speed: 14});
     }
 
-    // ---------- login handler ----------
-    $("loginBtn").addEventListener("click", async () => {
-      const name = nameSel.value.trim();
-      const pw = $("pw").value;
-
-      if (!name){
-        setLoginStatus("Pilih <strong>Nama</strong> dulu ya.", "bad");
-        return;
-      }
-      if (!pw){
-        setLoginStatus("Masukkan <strong>Password</strong> dulu ya.", "bad");
-        return;
-      }
-
-      setLoginStatus("Memverifikasi…", "info");
-
-      try{
-        // decrypt only for this user
-        const recipient = await verifyAndDecrypt(name, pw);
-        current = { name, recipient };
-        setLoginStatus(`Login sukses ✅ <span class="kbd">${name}</span>`, "ok");
-        $("pw").value = "";
-        enterReveal();
-      } catch (e){
-        setLoginStatus(`Gagal login ❌ ${e.message}`, "bad");
-      }
-    });
-
-    // show/hide password
+    // ==========================================================
+    // UI bindings
+    // ==========================================================
     $("showPwBtn").addEventListener("click", () => {
       const el = $("pw");
       el.type = (el.type === "password") ? "text" : "password";
-      $("showPwBtn").textContent = (el.type === "password") ? "Show" : "Hide";
+      beep(760, 0.04, "triangle", 0.02);
     });
 
-    // ---------- hold-to-reveal ----------
-    const holdBtn = $("holdBtn");
+    function doResetTerminal(){
+      warn();
+      const ok = confirm("Reset terminal akan mengembalikan semua nama (di device session ini). Lanjut?");
+      if (!ok) return;
+      clearUsed();
+      // clear first reveal flags for all agents
+      for (const u of USERS) sessionStorage.removeItem(revealKey(u.name));
+      refreshDropdown();
+      $("pw").value = "";
+      $("nameSel").value = "";
+      showMeter(false);
+      backToLogin();
+      typeTo($("loginStatus"), "TERMINAL RESET. Agents restored.", {speed: 14});
+    }
+
+    $("resetTerminalBtn").addEventListener("click", doResetTerminal);
+    $("resetFromCompleteBtn").addEventListener("click", doResetTerminal);
+    $("backBtn").addEventListener("click", backToLogin);
+
+    // hold-to-reveal
     const startHold = (e) => { e.preventDefault(); showReveal(true); };
     const endHold   = (e) => { e.preventDefault(); showReveal(false); };
 
-    holdBtn.addEventListener("mousedown", startHold);
-    holdBtn.addEventListener("mouseup", endHold);
-    holdBtn.addEventListener("mouseleave", endHold);
+    $("holdBtn").addEventListener("mousedown", startHold);
+    $("holdBtn").addEventListener("mouseup", endHold);
+    $("holdBtn").addEventListener("mouseleave", endHold);
+    $("holdBtn").addEventListener("touchstart", startHold, {passive:false});
+    $("holdBtn").addEventListener("touchend", endHold, {passive:false});
+    $("holdBtn").addEventListener("touchcancel", endHold, {passive:false});
 
-    holdBtn.addEventListener("touchstart", startHold, {passive:false});
-    holdBtn.addEventListener("touchend", endHold, {passive:false});
-    holdBtn.addEventListener("touchcancel", endHold, {passive:false});
-
-    // toggle reveal
     $("toggleBtn").addEventListener("click", () => {
+      beep(640, 0.04, "triangle", 0.02);
       showReveal(!revealed);
     });
 
-    // logout
     $("logoutBtn").addEventListener("click", logout);
 
-    // initial hint
-    if (!window.crypto?.subtle){
-      setLoginStatus("Browser kamu tidak mendukung WebCrypto. Coba pakai browser modern (Chrome/Safari terbaru).", "bad");
-    }
+    // login
+    $("loginBtn").addEventListener("click", async () => {
+      const name = $("nameSel").value.trim();
+      const pw = $("pw").value;
+
+      const used = new Set(getUsed().map(String));
+      if (!name){
+        warn();
+        await typeTo($("loginStatus"), "ERROR: Select agent name first.", {speed: 14});
+        return;
+      }
+      if (used.has(name)){
+        showCompleted(name);
+        return;
+      }
+      if (!pw){
+        warn();
+        await typeTo($("loginStatus"), "ERROR: Enter passcode.", {speed: 14});
+        return;
+      }
+
+      showMeter(true);
+      setMeter(0);
+      await typeTo($("loginStatus"), "AUTHORIZING…", {speed: 16});
+
+      let pct = 0;
+      const bump = () => {
+        pct = Math.min(92, pct + (Math.random() * 18 + 8));
+        setMeter(pct);
+        beep(420 + Math.random()*120, 0.03, "sine", 0.012);
+      };
+      const interval = setInterval(bump, 140);
+
+      try{
+        const recipient = await verifyAndDecrypt(name, pw);
+
+        clearInterval(interval);
+        setMeter(100);
+        chirp();
+
+        current = { name, recipient };
+
+        // lock agent for this device session
+        markUsed(name);
+
+        $("pw").value = "";
+        $("nameSel").value = "";
+
+        await typeTo($("loginStatus"), "ACCESS GRANTED ✅", {speed: 14});
+
+        setTimeout(async ()=>{
+          showMeter(false);
+          refreshDropdown();
+          await enterReveal();
+        }, 450);
+
+      } catch (e){
+        clearInterval(interval);
+        setMeter(0);
+        warn();
+        await typeTo($("loginStatus"), `ACCESS DENIED ❌ (${e.message})`, {speed: 14});
+        showMeter(false);
+      }
+    });
+
+    // boot
+    (async function boot(){
+      if (!window.crypto?.subtle){
+        await typeTo($("loginStatus"), "CRYPTO MODULE MISSING. Use modern Chrome/Safari.", {speed: 14});
+        showMeter(false);
+        return;
+      }
+      showMeter(false);
+      await typeTo($("loginStatus"), "BOOT OK. Select agent and authorize.", {speed: 14});
+    })();
   </script>
 </body>
 </html>
+
